@@ -67,3 +67,28 @@ class JobPosting(Model):
     standard_job_id: str
     country_code: Optional[str] = None
     days_to_hire: Optional[int] = None
+
+
+@mapper_registry.mapped
+@dataclass
+class DaysToHireStats(Model):
+    __table__ = Table(
+        "days_to_hire_stats",
+        mapper_registry.metadata,
+        Column("id", String, nullable=False, primary_key=True),
+        Column("standard_job_id", String, nullable=False),
+        Column("country_code", String, nullable=True),
+        Column("avg_days_to_hire", Integer, nullable=False),
+        Column("min_days_to_hire", Integer, nullable=False),
+        Column("max_days_to_hire", Integer, nullable=False),
+        Column("job_posting_count", Integer, nullable=False),
+        schema="public",
+    )
+
+    id: str
+    standard_job_id: str
+    avg_days_to_hire: int
+    min_days_to_hire: int
+    max_days_to_hire: int
+    job_posting_count: int
+    country_code: Optional[str] = None
