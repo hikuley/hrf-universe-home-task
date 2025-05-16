@@ -95,3 +95,26 @@ Create database:
     docker-compose up -d
     docker cp migrations/data/ hrf_universe_postgres:/tmp
     alembic upgrade head
+
+# Running the Application
+
+## Running the FastAPI Server
+
+To start the FastAPI server, run:
+
+    poetry run uvicorn home_task.main:app --reload
+
+The server will start on `http://localhost:8000`. You can access the API documentation at [http://localhost:8000/docs](http://localhost:8000/docs) (Swagger UI) or [http://localhost:8000/redoc](http://localhost:8000/redoc) (ReDoc).
+
+## Running the Statistics Calculator
+
+To calculate and store the "days to hire" statistics, run:
+
+    poetry run python -m home_task.calculate_stats
+
+Optional parameters:
+- `--min-postings`: Minimum number of job postings required to save statistics (default: 5)
+
+Example with custom parameters:
+
+    poetry run python -m home_task.calculate_stats --min-postings 10
