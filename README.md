@@ -55,6 +55,11 @@ So we want to cut lowest and highest percentiles of `days_to_hire` before calcul
   Job postings with `country_code` equal to `NULL` should be included in this calculation.
 - Overwrite existing rows in the table. We need only the latest statistics.
 
+The script uses pagination to handle large datasets efficiently:
+- Processes job postings in chunks to minimize memory usage
+- Configurable chunk size to balance between memory usage and processing speed
+- Maintains constant memory footprint regardless of total dataset size
+
 ## 3. Create REST API with one endpoint to get "days to hire" statistics.
 
 - Endpoint should accept `standard_job_id` and `country_code` as request parameters.
@@ -113,8 +118,13 @@ To calculate and store the "days to hire" statistics, run:
     poetry run python -m home_task.calculate_stats
 
 Optional parameters:
-- `--min-postings`: Minimum number of job postings required to save statistics (default: 5)
+- `--min-job-postings`: Minimum number of job postings required to save statistics (default: 5)
+- `--chunk-size`: Number of job postings to process at once (default: 1000)
 
 Example with custom parameters:
 
-    poetry run python -m home_task.calculate_stats --min-postings 10
+    # Use larger chunk size for faster processing (if you have enough memory)
+    poetry run python -m home_task.calculate_stats --min-job-postings 5 --chunk-size 5000
+
+    # Use smaller chunk size for lower memory usage
+    poetry run python -m home_task.calculate_stats --min-job-postings 5 --chunk-size 500
